@@ -3,6 +3,7 @@ from flask_mail import Message
 from app import mail
 from flask import render_template
 from app import app
+from flask_babel import lazy_gettext as _l
 
 # set up local email server
 # python -m smtpd -n -c DebuggingServer localhost:8025
@@ -24,7 +25,7 @@ def send_email(subject, sender, recipients, text_body, html_body):
 def send_password_reset_email(user):
     token = user.get_reset_password_token()
     print(token)
-    send_email('[Microblog] Reset Your Password',
+    send_email(_l('[Microblog] Reset Your Password'),
                 sender=app.config['ADMINS'][0],
                 recipients=[user.email],
                 text_body=render_template('email/reset_password.txt',

@@ -15,4 +15,4 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = [***REMOVED***]
     POSTS_PER_PAGE = 25
-    LANGAUGES = ['en', 'es']
+    LANGUAGES = ['en', 'es']
