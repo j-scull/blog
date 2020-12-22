@@ -4,6 +4,10 @@ from app import mail
 from flask import render_template
 from app import app
 
+# set up local email server
+# python -m smtpd -n -c DebuggingServer localhost:8025
+# set MAIL_SERVER=localhost
+# set MAIL_PORT=8025
 
 def send_async_email(app, msg):
     with app.app_context():

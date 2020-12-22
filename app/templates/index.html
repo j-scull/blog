@@ -1,24 +1,32 @@
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
-{% block content %}
+{% block app_content %}
     <h1>Hello {{ current_user.username }}!</h1>
+    
     {% if form %}
-        <form action="" method="POST">
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.post.label }}<br>
-                {{ form.post(cols=32, rows=4) }}<br>
-                {% for error in form.post.errors %}
-                    <span style="color:red;">[{{ error }}</span>
-                {% endfor %}
-            </p>
-            <p>{{ form.submit() }}</p>
-        </form>
+       {{ wtf.quick_form(form) }}
+       <br>
     {% endif %}
+    
     {% for post in posts %}
-    <div>
         {% include '_post.html' %}
-        <!--<p>{{ post.author.username }}: {{ post.body }}</p>-->
-    </div>
     {% endfor %}
+
+    <nav aria-label="...">
+        <ul class="pager">
+            <!--adds disabled state class when no more pages-->
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span>Newer posts
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    Older posts <span arai-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
 {% endblock %}

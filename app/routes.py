@@ -56,12 +56,15 @@ def logout():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
+    # posts = [
+    #     {'author': user, 'body': 'Test post #1'},
+    #     {'author': user, 'body': 'Test post #2'}
+    # ]
+    page = request.args.get('page', 1, type=int)
+    posts = user.user_posts().paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
     form = EmptyForm()
-    return render_template('user.html', user=user, posts=posts, form=form)
+    return render_template('user.html', user=user, posts=posts.items, form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
