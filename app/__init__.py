@@ -75,12 +75,11 @@ if not app.debug:
         app.logger.info('Microblog startup')
 
 
-# pybabel extract -F babel.cfg -k _l -o messages.pot .
-# pybabel init -i messages.pot -d app/translations -l es
-# pybabel update -i messages.pot -d app/translations
-# pybabel compile -d app/translations
 
-@babel.localeselector
-def get_locale():
-    #return request.accept_languages.best_match(app.config['LANGUAGES'])
-    return 'es'
+# Force the website to display in Spanish
+# See cli.py
+
+# @babel.localeselector
+# def get_locale():
+#     #return request.accept_languages.best_match(app.config['LANGUAGES'])
+#     return 'es'

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-12-22 21:18+0000\n"
+"POT-Creation-Date: 2020-12-23 16:37+0000\n"
 "PO-Revision-Date: 2020-12-22 21:05+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: app/__init__.py:23
+#: app/__init__.py:22
 #, fuzzy
 msgid "Please log in to access this page"
 msgstr "Por favor ingrese para acceder a esta página."
@@ -52,7 +52,7 @@ msgstr "Email"
 msgid "Repeat Password"
 msgstr "Repetir Contraseña"
 
-#: app/forms.py:24 app/routes.py:83 app/templates/register.html:5
+#: app/forms.py:24 app/routes.py:87 app/templates/register.html:5
 msgid "Register"
 msgstr "Registrarse"
 
@@ -87,59 +87,59 @@ msgstr "Dí algo"
 msgid "Request Password Reset"
 msgstr "Pedir una nueva contraseña"
 
-#: app/routes.py:22
+#: app/routes.py:26
 msgid "Your post is now live!"
 msgstr "¡Tu artículo ha sido publicado!"
 
-#: app/routes.py:40
+#: app/routes.py:44
 msgid "Invalid username or password"
 msgstr "Nombre de usuario o contraseña inválidos"
 
-#: app/routes.py:81
+#: app/routes.py:85
 msgid "Registration successful"
 msgstr ""
 
-#: app/routes.py:101
+#: app/routes.py:106
 #, fuzzy
 msgid "Your changes have been saved"
 msgstr "Tus cambios han sido salvados."
 
-#: app/routes.py:106 app/templates/edit_profile.html:5
+#: app/routes.py:111 app/templates/edit_profile.html:5
 msgid "Edit Profile"
 msgstr "Editar Perfil"
 
-#: app/routes.py:116 app/routes.py:138
+#: app/routes.py:121 app/routes.py:143
 #, fuzzy, python-format
 msgid "User %(username)s not found"
 msgstr "El usuario %(username)s no ha sido encontrado."
 
-#: app/routes.py:120
+#: app/routes.py:125
 msgid "You cannot follow yourself!"
 msgstr "¡No te puedes seguir a tí mismo!"
 
-#: app/routes.py:124
+#: app/routes.py:129
 #, fuzzy, python-format
 msgid "You are following %(username)s"
 msgstr "¡Ahora estás siguiendo a %(username)s!"
 
-#: app/routes.py:146
+#: app/routes.py:151
 #, fuzzy, python-format
 msgid "You are no longer following %(username)s"
 msgstr "No estás siguiendo a %(username)s."
 
-#: app/routes.py:160 app/templates/base.html:26
+#: app/routes.py:165 app/templates/base.html:26
 msgid "Explore"
 msgstr "Explorar"
 
-#: app/routes.py:173
+#: app/routes.py:178
 msgid "Check your email for the instructions to reset your password"
 msgstr "Busca en tu email las instrucciones para crear una nueva contraseña"
 
-#: app/routes.py:175 app/templates/reset_password.html:5
+#: app/routes.py:180 app/templates/reset_password.html:5
 msgid "Reset Password"
 msgstr "Nueva Contraseña"
 
-#: app/routes.py:190
+#: app/routes.py:195
 msgid "Your password has been reset."
 msgstr "Tu contraseña ha sido cambiada."
 
@@ -165,6 +165,10 @@ msgstr "El administrador ha sido notificado. ¡Lamentamos la inconveniencia!"
 #, python-format
 msgid "%(username)s said %(when)s"
 msgstr "%(username)s dijo %(when)s"
+
+#: app/templates/_post.html:22
+msgid "Translate"
+msgstr ""
 
 #: app/templates/base.html:7
 #, fuzzy

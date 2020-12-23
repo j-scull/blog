@@ -17,6 +17,10 @@
             <!--e.g. said 4 hours ago:-->
             <br>
             {{ post.body }}
+            {% if post.language and post.laguage != g.locale %}
+            <br><br>
+            <a href='#'>{{ _('Translate') }}</a>
+            {% endif %}
         </td>
     </tr>
 </table>
