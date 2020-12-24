@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, g
+from flask import render_template, flash, redirect, url_for, request, g, jsonify
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required
@@ -8,6 +8,7 @@ from datetime import datetime
 from app.email import send_password_reset_email
 from flask_babel import get_locale, lazy_gettext as _l
 from guess_language import guess_language
+from app.translate import translate
 
 
 
@@ -195,6 +196,15 @@ def reset_password(token):
         flash(_l('Your password has been reset.'))
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
+
+
+@app.route('/translate', methods=['POST'])
+@login_required
+def translate_text():
+    return jsonify({'text': translate(request.form['text'],
+                                      request.form['source_language'],
+                                      request.form['dest_language'])})
+
 
 # for joe@joe.com
 #127.0.0.1:5000.reset_password_request/eyJ0eXAiOiJKV1QiLCJhbGciOiJiUzI1NiJ9.eyJyZXNldF9wYXNzd29yZCI6MSwiZXhwIjoxNjA2MzA1NzM2LjkxOTk2NTd9.CikNPDhurpEJ2N5BaDi78lvBEs_g4vAyf4_QWOz1dMg
