@@ -25,7 +25,10 @@ bootstrap = Bootstrap(app)             # bootstrap.html becomes available - can 
 moment = Moment(app)
 babel = Babel(app)
 
-from app import routes, models, errors
+from app.errors import bp as errors_bp
+app.register_blueprint(errors_bp)
+
+from app import routes, models
 
 
 # set up local smtp debugging server to receive emails
