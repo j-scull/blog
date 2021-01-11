@@ -16,6 +16,9 @@ followers = db.Table('followers',
 )
 
 class User(UserMixin, db.Model):
+    """
+    Represents a user of the blog
+    """
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -34,6 +37,13 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'),
         lazy='dynamic'
     )
+    messages_sent = db.relationship('Message',
+                                    foreign_keys='Message.sender_id',
+                                    backref='author', lazy='dynamic')
+    messages_received = db.relationship('Message',
+                                    foreign_keys='Message.recipient_id',
+                                    backref='recipient', lazy='dynamic')
+    last_message_read_time = db.Column(db.DateTime)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -83,9 +93,20 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
+    def new_message(self):
+        """
+        returns: the number of unread messages
+        """
+        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+        return Message.query.filter_by(recipient=self).filter(
+            Message.timestamp > last_read_time).count()
+        
 
 
 class SearchableMixin(object):
+    """
+    Support for searching with Posts
+    """
     @classmethod
     def search(cls, expression, page, per_page):
         ids, total = query_index(cls.__tablename__, expression, page, per_page)
@@ -130,6 +151,9 @@ db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
 
 
 class Post(SearchableMixin, db.Model):
+    """
+    Represents a post by a user
+    """
     __searchable__ = ['body']
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
@@ -150,3 +174,15 @@ def load_user(id):
 
 
 
+class Message(db.Model):
+    """
+    Support private messages between users
+    """
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Message {}>'.format(self.body)

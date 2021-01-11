@@ -155,5 +155,15 @@ def search():
                             next_url=next_url, prev_url=prev_url)
 
 
+
+@bp.route('/user/<username>/popup')
+@login_required
+def user_popup(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    form = EmptyForm()
+    return render_template('user_popup.html', user=user, form=form)
+
+
+
 # for joe@joe.com
 #127.0.0.1:5000.reset_password_request/eyJ0eXAiOiJKV1QiLCJhbGciOiJiUzI1NiJ9.eyJyZXNldF9wYXNzd29yZCI6MSwiZXhwIjoxNjA2MzA1NzM2LjkxOTk2NTd9.CikNPDhurpEJ2N5BaDi78lvBEs_g4vAyf4_QWOz1dMg
