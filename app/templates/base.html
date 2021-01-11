@@ -22,8 +22,16 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('main.index') }}">{{ _('Home') }}</a></li>
-                    <li><a href="{{ url_for('main.explore') }}">{{ _('Explore') }}</a></li>
+                    <li>
+                        <a href="{{ url_for('main.index') }}">
+                            {{ _('Home') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('main.explore') }}">
+                            {{ _('Explore') }}
+                        </a>
+                    </li>
                 </ul>
                 {% if g.search_form %}
                     <form class="navbar-form navbar-left" method="GET" action="{{ url_for('main.search') }}">
@@ -35,10 +43,33 @@
                 {% endif %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
-                    <li><a href="{{ url_for('auth.login') }}">{{ _('Login') }}</a></li>
+                        <li>
+                            <a href="{{ url_for('auth.login') }}">
+                                {{ _('Login') }}
+                            </a>
+                        </li>
                     {% else %}
-                    <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _(Profile) }}</a></li>
-                    <li><a href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a></li>
+                        <li>
+                            <a href="{{ url_for('main.messages') }}">
+                                {{ _('Messages') }}
+                                {% set new_messages = current_user.new_messages() %}
+                                {% if new_messages %}
+                                    <span id="message_count" class="badge" style="visibility: {% if new_messages %}visible {% else %}hidden {% endif %};">
+                                        {{ new_messages }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('main.user', username=current_user.username) }}">
+                                {{ _(Profile) }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('auth.logout') }}">
+                                {{ _('Logout') }}
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
@@ -125,6 +156,12 @@
                 }
             )
         });
+
+        // Message count display
+        function set_message_count(n) {
+            $('#message').text(n);
+            $('#message').css('visibity', n ? 'visible' : 'hidden');
+        }
 
     </script>
 

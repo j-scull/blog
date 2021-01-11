@@ -93,7 +93,7 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
-    def new_message(self):
+    def new_messages(self):
         """
         returns: the number of unread messages
         """
