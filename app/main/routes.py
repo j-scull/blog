@@ -3,7 +3,7 @@ from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, EmptyForm, PostForm, SearchForm, MessageForm
 from flask_login import current_user, login_required
-from app.models import User, Post, Message
+from app.models import User, Post, Message, Notification
 from werkzeug.urls import url_parse
 from datetime import datetime
 from flask_babel import get_locale, lazy_gettext as _l
@@ -172,6 +172,7 @@ def send_message(recipient):
         msg = Message(author=current_user, recipient=user,
                       body=form.message.data)
         db.session.add(msg)
+        user.add_notification('unread_message_count', user.new_messages())
         db.session.commit()
         flash(_l('Your message has been sent.'))
         return redirect(url_for('main.user', username=recipient))
@@ -183,6 +184,7 @@ def send_message(recipient):
 @login_required
 def messages():
     current_user.last_message_read_time = datetime.utcnow()
+    current_user.add_notification('unread_message_count', 0)
     db.session.commit()
     page = request.args.get('page', 1, type=int)
     messages = current_user.messages_received.order_by(
@@ -196,6 +198,17 @@ def messages():
                             next_url=next_url, prev_url=prev_url)
 
 
+@bp.route('/notifications')
+@login_required
+def notifications():
+    since = request.args.get('since', 0.0, type=float)
+    notifications = current_user.notifications.filter(
+        Notification.timestamp > since).order_by(Notification.timestamp.asc())
+    return jsonify([{
+        'name': n.name,
+        'data': n.get_data(),
+        'timestamp': n.timestamp
+    } for n in notifications])
 
 # for joe@joe.com
 #127.0.0.1:5000.reset_password_request/eyJ0eXAiOiJKV1QiLCJhbGciOiJiUzI1NiJ9.eyJyZXNldF9wYXNzd29yZCI6MSwiZXhwIjoxNjA2MzA1NzM2LjkxOTk2NTd9.CikNPDhurpEJ2N5BaDi78lvBEs_g4vAyf4_QWOz1dMg
