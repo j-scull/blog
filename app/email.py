@@ -9,6 +9,15 @@ from flask import current_app
 # set MAIL_SERVER=localhost
 # set MAIL_PORT=8025
 
+# set up gmail server
+# set MAIL_SERVER=stmp.googlemail.com
+# set MAIL_PORT=587
+# set MAIL_USE_TLS=1
+# set MAIL_USERNAME=<gmail address>
+# set MAIL_PASSWORD=<password>
+
+# joe.scullion@ucdconnect.ie
+
 def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
