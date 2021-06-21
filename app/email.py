@@ -16,7 +16,7 @@ from flask import current_app
 # set MAIL_USERNAME=<gmail address>
 # set MAIL_PASSWORD=<password>
 
-# ***REMOVED***
+
 
 def send_async_email(app, msg):
     with app.app_context():

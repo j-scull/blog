@@ -162,7 +162,7 @@
             $('#message_count').text(n);
             $('#message_count').css('visibity', n ? 'visible' : 'hidden');
         }
-
+        
         {% if current_user.is_authenticated %}
             $(function() {
                 var since = 0;
