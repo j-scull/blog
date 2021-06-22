@@ -22,7 +22,7 @@ followers = db.Table('followers',
 
 class User(UserMixin, db.Model):
     """
-    Represents a user of the blog
+    Represents and provides the functionality for a user of the blog
     """
     
     id = db.Column(db.Integer, primary_key=True)
@@ -121,6 +121,8 @@ class User(UserMixin, db.Model):
             
     def get_reset_password_token(self, expires_in=600):
         """
+        Generates the resset password token using JSON Web Tokens
+        expires_in: token expiration time - default is ten minutes
         """
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},
@@ -129,6 +131,7 @@ class User(UserMixin, db.Model):
     @staticmethod
     def verify_reset_password_token(token):
         """
+        Validates the token sent with the reset password link
         """
         try:
             id = jwt.decode(token, current_app.config['SECRET_KEY'], 
@@ -147,6 +150,9 @@ class User(UserMixin, db.Model):
         
     def add_notification(self, name, data):
         """
+        Updates the number of new unread messages for a user
+        name: the notification type e.g. unread_message_count
+        data: the notification content - can be a single value e.g. the number of unread messages
         """
         self.notifications.filter_by(name=name).delete()
         n = Notification(name=name, payload_json=json.dumps(data), user=self)
@@ -157,12 +163,26 @@ class User(UserMixin, db.Model):
 
 class SearchableMixin(object):
     """
-    Supports searching for user posts with ElasticSearch
-    """
+    Integrates Searching with SQLAlchemy.
+    Uses SQLAlchemy events to keep the search index in sync with the database.
     
+    *Can be used with any Search service and database model, in this app it is
+    used to bind the Post model to ElasticSearch.
+    Index query functions for ElasticSearch are defined in search.py
+    """
+
     @classmethod
     def search(cls, expression, page, per_page):
         """
+        Searches the index for a given text string.
+        -------------------------------------------
+        Parameters:
+        expression - the text string to search for
+        page - the current page
+        per_page - the number of results to display per page
+        -------------------------------------------
+        Returns:
+        A list of objects matching the search criterea
         """
         ids, total = query_index(cls.__tablename__, expression, page, per_page)
         if total == 0:
@@ -170,12 +190,14 @@ class SearchableMixin(object):
         when = []
         for i in range(len(ids)):
             when.append((ids[i], i))
-        return cls.query.filter(cls.id.in_(ids)).order_by(
+        return cls.query.filter(cls.id.in_(ids)).order_by(   # ensure DB results 
             db.case(when, value=cls.id)), total
 
     @classmethod
     def before_commit(cls, session):
         """
+        Saves changes that are made to the database before they are committed
+        session - a connected session with the database
         """
         session._changes = {
             'add': list(session.new),
@@ -186,6 +208,8 @@ class SearchableMixin(object):
     @classmethod
     def after_commit(cls, session):
         """
+        Adds any objects in _changes to the index after they are committed to the database
+        session - a connected session with the database
         """
         for obj in session._changes['add']:
             if isinstance(obj, SearchableMixin):
@@ -200,6 +224,9 @@ class SearchableMixin(object):
 
     @classmethod
     def reindex(cls):
+        """
+        Adds all objects inthe the database relation to the search index
+        """
         for obj in cls.query:
             add_to_index(cls.__tablename__, obj)
 
