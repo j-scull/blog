@@ -1,0 +1,121 @@
+2020-12-22 12:09:02,681 ERROR: Exception on /reset_password_request [GET] [in c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\User\Desktop\Projects\blog\app\routes.py", line 168, in reset_password_request
+    return render_template('reset_password_request.html', title='Reset Password', form=form)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\User\Desktop\Projects\blog\app\templates\reset_password_request.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\User\Desktop\Projects\blog\app\templates\base.html", line 11, in template
+    {% blockcontent %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'blockcontent'.
+2020-12-22 12:09:26,989 INFO: Microblog startup [in C:\Users\User\Desktop\Projects\blog\app\__init__.py:68]
+2020-12-22 12:09:30,998 ERROR: Exception on /reset_password_request [GET] [in c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\User\Desktop\Projects\blog\app\routes.py", line 168, in reset_password_request
+    return render_template('reset_password_request.html', title='Reset Password', form=form)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\User\Desktop\Projects\blog\app\templates\reset_password_request.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\User\Desktop\Projects\blog\app\templates\base.html", line 41, in template
+    {% block content %}
+jinja2.exceptions.TemplateAssertionError: block 'content' defined twice
+2020-12-22 12:10:21,354 INFO: Microblog startup [in C:\Users\User\Desktop\Projects\blog\app\__init__.py:68]
+2020-12-22 12:25:59,843 INFO: Microblog startup [in C:\Users\User\Desktop\Projects\blog\app\__init__.py:68]
+2020-12-22 12:26:05,936 ERROR: Exception on /index [GET] [in c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\User\Desktop\Projects\blog\app\routes.py", line 28, in index
+    return render_template('index.html', title='Home', form=form, posts=posts.items)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\User\Desktop\Projects\blog\app\templates\index.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "C:\Users\User\Desktop\Projects\blog\app\templates\base.html", line 1, in top-level template code
+    {% extends 'bootstrap/base.html' %}
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 1, in top-level template code
+    {% block doc -%}
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 4, in block "doc"
+    {%- block html %}
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 20, in block "html"
+    {% block body -%}
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 23, in block "body"
+    {% block content -%}
+  File "C:\Users\User\Desktop\Projects\blog\app\templates\base.html", line 52, in block "content"
+    {% block app_content %}
+  File "C:\Users\User\Desktop\Projects\blog\app\templates\index.html", line 7, in block "app_content"
+    {{ wtf.quick_from(form) }}
+  File "c:\users\user\desktop\projects\blog\venv\lib\site-packages\jinja2\environment.py", line 471, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'wtf' is undefined
+2020-12-22 12:27:26,837 INFO: Microblog startup [in C:\Users\User\Desktop\Projects\blog\app\__init__.py:68]
