@@ -1,7 +1,7 @@
 from app import create_app, db, cli
 from app.models import User, Post, Message, Notification
 
-app = create_app()
+app = create_app()      # defined in __init__.py
 cli.register(app)
 
 @app.shell_context_processor
