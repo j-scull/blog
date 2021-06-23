@@ -78,9 +78,8 @@ def user(username):
 def before_request():
     """
     Flask before_request decorator registers a function to be called before all requests.
-    -------------------------------------------------------------------------------------
     Adds a last visited time for a user to their profile - this is translated to the appropriate language.
-    Also, renders the search box for searching posts.
+    Also renders the search box for searching posts.
     """
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
