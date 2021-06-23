@@ -148,7 +148,6 @@ tasks.py
 migrations/
 logs/
 app.db
-'
 .flaskenv
 .gitignore
 babel.cfg
