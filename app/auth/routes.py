@@ -1,3 +1,7 @@
+"""
+View functions that handle authentication.
+"""
+
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
@@ -11,11 +15,14 @@ from flask_babel import lazy_gettext as _l
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Handles user logins.
+    """
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(username=form.username.data).first() 
         if user is None or not user.check_password(form.password.data):
             flash(_l('Invalid username or password'))
             return redirect(url_for('auth.login'))
@@ -27,14 +34,22 @@ def login():
     return render_template('auth/login.html', title=_l('Sign In'), form=form)
 
 
+
 @bp.route('/logout')
 def logout():
+    """
+    Logs a user out of the blog.
+    """
     logout_user()
     return redirect(url_for('main.index'))
 
 
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    Registers a new user with the blog.
+    """
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = RegistrationForm()
@@ -48,9 +63,12 @@ def register():
     return render_template('auth/register.html', title=_l('Register'), form=form)
 
 
-# request to reset password
+
 @bp.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
+    """
+    Handles requests to reset passwords
+    """
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = ResetPasswordRequestForm()
@@ -63,9 +81,12 @@ def reset_password_request():
     return render_template('auth/reset_password_request.html', title=_l('Reset Password'), form=form)
 
 
-# form to reset password
+
 @bp.route('/reset_password_request/<token>', methods=['GET', 'POST'])
 def reset_password(token):
+    """
+    Handles password resets.
+    """
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     user = User.verify_reset_password_token(token)
