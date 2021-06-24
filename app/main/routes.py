@@ -336,6 +336,3 @@ def notifications():
         'data': n.get_data(),
         'timestamp': n.timestamp
     } for n in notifications])
-
-# for joe@joe.com
-#127.0.0.1:5000.reset_password_request/eyJ0eXAiOiJKV1QiLCJhbGciOiJiUzI1NiJ9.eyJyZXNldF9wYXNzd29yZCI6MSwiZXhwIjoxNjA2MzA1NzM2LjkxOTk2NTd9.CikNPDhurpEJ2N5BaDi78lvBEs_g4vAyf4_QWOz1dMg
