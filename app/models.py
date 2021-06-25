@@ -12,6 +12,9 @@ import jwt
 from flask import current_app
 from app.search import add_to_index, remove_from_index, query_index
 import json
+import redis
+import rq
+
 
 
 # Create followers table - seconadary association table used in User class
@@ -34,6 +37,7 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    tasks = db.relationship('Task', backref='user', lazy='dynamic')
     
     # set up many-to-many follower-followed relationship
     followed = db.relationship(
@@ -151,13 +155,43 @@ class User(UserMixin, db.Model):
     def add_notification(self, name, data):
         """
         Updates the number of new unread messages for a user
-        name: the notification type e.g. unread_message_count
-        data: the notification content - can be a single value e.g. the number of unread messages
+        name - the notification type e.g. unread_message_count
+        data - the notification content - can be a single value e.g. the number of unread messages
         """
         self.notifications.filter_by(name=name).delete()
         n = Notification(name=name, payload_json=json.dumps(data), user=self)
         db.session.add(n)
         return
+
+    def launch_task(self, name, description, *args, **kwargs):
+        """
+        Submits a task to the RQ queue.
+        -------------------------------
+        Parameters
+        name - the function name defined in app/tasks.py
+        description - a description of the task to present to users
+        -------------------------------
+        Returns
+        A task object.
+        """
+        rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id, 
+                                                *args, **kwargs)
+        task = Task(id=rq_job.get_id(), name=name, description=description, user=self)
+        db.session.add(task)
+        return task
+
+    def get_tasks_in_progress(self):
+        """
+        Returns: any tasks in progress belonging to the user.
+        """
+        return Task.query.filter_by(user=self, complete=False).all()
+
+    def get_task_in_progress(self, name):
+        """
+        Returns: a given task belonging to the user.
+        """
+        return Task.query.filter_by(name=name, user=self, complete=False).first()
+        
 
 
 
@@ -299,3 +333,41 @@ class Notification(db.Model):
         Returns: the message associated with the notification
         """
         return json.loads(str(self.payload_json))
+
+
+
+class Task(db.Model):
+    """
+    Keeps track of background jobs for each user
+    """
+
+    id = db.Column(db.String(36), primary_key=True) # job id as primary key
+    name = db.Column(db.String(128), index=True)
+    description = db.Column(db.String(128))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    complete = db.Column(db.Boolean, default=False)
+
+    def get_rq_job(self):
+        """
+        Checks if a job exists.
+        -----------------------
+        Returns
+        The relevant job if it exists, otherwise returns None.
+        """
+        try:
+            rq_job = rq.job.Job.fetch(self.id, connection=current_app.redis)
+        except (redis.exceptions.RedisError, rq.exceptions.NoSuchJobError):
+            return None
+        return rq_job
+
+    def get_progress(self):
+        """
+        Reports on a job's progress.
+        Assumes a non-existent job is 100% complete.
+        Assumes that a job without meta is 0% complete.
+        -----------------------------------------------
+        Returns
+        Job completion percentage [0, 100].
+        """
+        job = self.get_rq_job()
+        return job.meta.get('progress', 0) if job is not None else 100

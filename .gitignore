@@ -59,6 +59,7 @@ cover/
 # Translations
 *.mo
 *.pot
+*.po
 
 # Django stuff:
 *.log
@@ -144,7 +145,6 @@ dmypy.json
 cython_debug/
 
 # additional development ad test files
-tasks.py
 migrations/
 logs/
 app.db

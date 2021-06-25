@@ -11,7 +11,7 @@ from flask_login import current_user, login_required
 from app.models import User, Post, Message, Notification
 from werkzeug.urls import url_parse
 from datetime import datetime
-from flask_babel import get_locale, lazy_gettext as _l
+from flask_babel import _, get_locale, lazy_gettext as _l
 from guess_language import guess_language
 from app.translate import translate
 
@@ -336,3 +336,16 @@ def notifications():
         'data': n.get_data(),
         'timestamp': n.timestamp
     } for n in notifications])
+
+
+@bp.route('/export_posts')
+@login_required
+def export_posts():
+    """
+    """
+    if current_user.get_task_in_progress('export_posts'):
+        flash(_('An export task is currently in progress'))
+    else:
+        current_user.launch_task('export_posts', _('Exporting posts...'))
+        db.session.commit()
+    return redirect(url_for('main.user', username=current_user.username))

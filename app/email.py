@@ -38,7 +38,8 @@ def send_async_email(app, msg):
         mail.send(msg)
 
 
-def send_email(subject, sender, recipients, text_body, html_body):
+def send_email(subject, sender, recipients, text_body, html_body, 
+               attachments=None, sync=False):
     """
     Sends an email - sets up a thread to send the email asychronously
     -----------------------------------------------------------------
@@ -48,12 +49,15 @@ def send_email(subject, sender, recipients, text_body, html_body):
     recipients - the recipients of the email
     text_body - the email content in txt
     html_body - the email content in html
+    attachments - email attachments
+    sync - if True, sends the email synchronously, otherwise sends asynchronously
     """
     msg = Message(subject, sender=sender, recipients=recipients)
     msg.body = text_body
     msg.html = html_body
+    if attachments:
+        for attachment in attachments:
+            msg.attach(*attachment)
+    if sync:
+        mail.send(msg)
     Thread(target=send_async_email, args=(current_app._get_current_object(), msg)).start()
-
-
-
-    
