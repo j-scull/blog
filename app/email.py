@@ -10,8 +10,8 @@ An email server can be set up locally for test purposes using:
 >> export MAIL_PORT=8025
 
 To set up a gmail server do the following:
->> export MAIL_SERVER=stmp.googlemail.com
->> export MAIL_PORT=587
+>> export MAIL_SERVER=smtp.googlemail.com
+>> export MAIL_PORT=587:q
 >> export MAIL_USE_TLS=1
 >> export MAIL_USERNAME=<gmail address>
 >> export MAIL_PASSWORD=<password>
