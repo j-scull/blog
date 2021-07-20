@@ -9,7 +9,7 @@ from datetime import datetime
 from time import time
 from flask_login import UserMixin
 import jwt
-from flask import current_app
+from flask import current_app, url_for
 from app.search import add_to_index, remove_from_index, query_index
 import json
 
@@ -20,7 +20,40 @@ followers = db.Table('followers',
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
-class User(UserMixin, db.Model):
+
+class PaginatedAPIMixin(object):
+    """
+    Generic Mixin class - allows models that inherit it to be represented as collections in api calls
+    """
+    @staticmethod
+    def to_collection_dict(query, page, per_page, endpoint, **kwargs):
+        """
+        Generates a dictionary represention of a paginated collection of db model type
+        query: a Flask-SQLAlchemy query object
+        page: the current page of the collection
+        per_page: the number of objects contained in a page
+        endpoint: the endpoint for the collection of resources
+        """
+        resources = query.paginate(page, per_page, False)
+        data = {
+            'items': [item.to_dict() for item in resources.items],
+            '_meta': {
+                'page': page,
+                'per_page': per_page,
+                'total_pages': resources.pages,
+                'total_items': resources.total
+            },
+            '_links': {
+                'self': url_for(endpoint, page=page, per_page=per_page, **kwargs),
+                'next': url_for(endpoint, page=page, per_page=per_page, **kwargs),
+                'previous': url_for(endpoint, page=page, per_page=per_page, **kwargs)
+            }
+        }
+        return data
+
+
+
+class User(PaginatedAPIMixin, UserMixin, db.Model):
     """
     Represents and provides the functionality for a user of the blog
     """
@@ -158,6 +191,40 @@ class User(UserMixin, db.Model):
         n = Notification(name=name, payload_json=json.dumps(data), user=self)
         db.session.add(n)
         return
+
+    def to_dict(self, include_email=False):
+        """
+        Returns a dictionary representation of a user in the database
+        """
+        data = {
+            'id': self.id,
+            'username': self.username,
+            'last_seen': self.last_seen.isoformat() + 'Z',
+            'about_me': self.about_me,
+            'post_count': self.posts.count(),
+            'follower_count': self.followers.count(),
+            'followed_count': self.followed.count(),
+            '_links': {
+                'self': url_for('api.get_user', id=self.id),
+                'followers': url_for('api.get_followers', id=self.id),
+                'followed': url_for('api.get_followed', id=self.id),
+                'avatar': self.avatar(128)
+            }
+        }
+        if include_email:
+            data['email'] = self.email
+        return data
+
+    def from_dict(self, data, new_user=False):
+        """
+        Converts a dictionary representation of a user to a User object.
+        data: a dictionary representation of a user
+        """
+        for field in ['username', 'email', 'about_me']:
+            if field in data:
+                setattr(self, field, data[field])
+        if new_user and 'password' in data:
+            self.set_password(data['password'])
 
 
 
