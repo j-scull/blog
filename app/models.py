@@ -44,9 +44,12 @@ class PaginatedAPIMixin(object):
                 'total_items': resources.total
             },
             '_links': {
-                'self': url_for(endpoint, page=page, per_page=per_page, **kwargs),
-                'next': url_for(endpoint, page=page, per_page=per_page, **kwargs),
-                'previous': url_for(endpoint, page=page, per_page=per_page, **kwargs)
+                'self': url_for(endpoint, page=page, per_page=per_page, 
+                                **kwargs),
+                'next': url_for(endpoint, page=page + 1, per_page=per_page, 
+                                **kwargs) if resources.has_next else None,
+                'previous': url_for(endpoint, page=page - 1, per_page=per_page, 
+                                **kwargs) if resources.has_prev else None
             }
         }
         return data
